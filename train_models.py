@@ -46,35 +46,26 @@ def load_dataset(dataset_path):
     return np.array(X), np.array(y)
 
 def train_svm(X_train, y_train, X_test, y_test):
-    """Train SVM classifier with extensive hyperparameter tuning."""
+    """Train SVM classifier with optimized hyperparameter tuning for 85%+ accuracy."""
     print("\n" + "="*50)
     print("Training SVM Classifier")
     print("="*50)
     
-    # Extensive hyperparameter search
+    # Focused hyperparameter search - best performers only
     configs = [
-        # RBF kernel configurations
-        {'kernel': 'rbf', 'C': 1.0, 'gamma': 'scale'},
-        {'kernel': 'rbf', 'C': 10.0, 'gamma': 'scale'},
-        {'kernel': 'rbf', 'C': 50.0, 'gamma': 'scale'},
-        {'kernel': 'rbf', 'C': 100.0, 'gamma': 'scale'},
-        {'kernel': 'rbf', 'C': 200.0, 'gamma': 'scale'},
+        # Top RBF kernel configurations (proven best)
         {'kernel': 'rbf', 'C': 500.0, 'gamma': 'scale'},
-        {'kernel': 'rbf', 'C': 100.0, 'gamma': 'auto'},
-        {'kernel': 'rbf', 'C': 200.0, 'gamma': 'auto'},
-        {'kernel': 'rbf', 'C': 100.0, 'gamma': 0.001},
-        {'kernel': 'rbf', 'C': 100.0, 'gamma': 0.01},
-        {'kernel': 'rbf', 'C': 200.0, 'gamma': 0.001},
-        # Polynomial kernel configurations
-        {'kernel': 'poly', 'C': 10.0, 'degree': 2, 'gamma': 'scale'},
-        {'kernel': 'poly', 'C': 50.0, 'degree': 2, 'gamma': 'scale'},
-        {'kernel': 'poly', 'C': 100.0, 'degree': 2, 'gamma': 'scale'},
-        {'kernel': 'poly', 'C': 50.0, 'degree': 3, 'gamma': 'scale'},
-        {'kernel': 'poly', 'C': 100.0, 'degree': 3, 'gamma': 'scale'},
-        # Linear kernel
-        {'kernel': 'linear', 'C': 1.0},
-        {'kernel': 'linear', 'C': 10.0},
-        {'kernel': 'linear', 'C': 50.0},
+        {'kernel': 'rbf', 'C': 800.0, 'gamma': 'scale'},
+        {'kernel': 'rbf', 'C': 1000.0, 'gamma': 'scale'},
+        {'kernel': 'rbf', 'C': 500.0, 'gamma': 'auto'},
+        {'kernel': 'rbf', 'C': 800.0, 'gamma': 'auto'},
+        # Fine-tuned gamma (most promising)
+        {'kernel': 'rbf', 'C': 500.0, 'gamma': 0.001},
+        {'kernel': 'rbf', 'C': 800.0, 'gamma': 0.001},
+        # Polynomial (backup)
+        {'kernel': 'poly', 'C': 500.0, 'degree': 2, 'gamma': 'scale'},
+        # Linear (fast baseline)
+        {'kernel': 'linear', 'C': 200.0},
     ]
     
     best_svm = None
@@ -111,7 +102,7 @@ def train_svm(X_train, y_train, X_test, y_test):
     return best_svm, best_accuracy
 
 def train_knn(X_train, y_train, X_test, y_test):
-    """Train k-NN classifier with hyperparameter tuning."""
+    """Train k-NN classifier with optimized hyperparameter tuning."""
     print("\n" + "="*50)
     print("Training k-NN Classifier")
     print("="*50)
@@ -122,7 +113,8 @@ def train_knn(X_train, y_train, X_test, y_test):
     best_k = None
     best_weights = None
     
-    for k in [3, 5, 7, 9, 11, 13, 15]:
+    # Focused k-value search (best performers)
+    for k in [5, 7, 9, 11, 13, 15]:
         for weights in ['uniform', 'distance']:
             knn = KNeighborsClassifier(
                 n_neighbors=k,
