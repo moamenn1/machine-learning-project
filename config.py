@@ -21,11 +21,11 @@ CLASS_TO_ID = {v: k for k, v in CLASSES.items()}
 TARGET_SAMPLES_PER_CLASS = 800  # More data for better training (60%+ increase from ~500)
 AUGMENTATION_FACTOR = 1.6  # 60% increase for better generalization
 
-# Feature extraction settings
-HOG_ORIENTATIONS = 12  # More orientations for better edge detection
-HOG_PIXELS_PER_CELL = (8, 8)  # Finer granularity
+# Feature extraction settings (optimized for speed and accuracy)
+HOG_ORIENTATIONS = 9  # Standard 9 orientations (was 12)
+HOG_PIXELS_PER_CELL = (16, 16)  # Larger cells = fewer features (was 8x8)
 HOG_CELLS_PER_BLOCK = (2, 2)
-COLOR_HIST_BINS = 64  # More color detail for better discrimination
+COLOR_HIST_BINS = 32  # Reduced bins for speed (was 64)
 IMAGE_SIZE = (128, 128)  # Standard size for feature extraction
 
 # LBP settings for texture features

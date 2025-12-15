@@ -297,36 +297,24 @@ def extract_spatial_features(image):
 
 def extract_features(image):
     """
-    Extract comprehensive feature vector from image.
+    Extract optimized feature vector for fast, accurate classification.
     
-    Combines multiple feature types for robust material classification:
+    Uses only the most important features:
     - HOG: Shape and edge information (~1500 features)
     - LBP: Texture patterns (64 features)
-    - Gabor: Multi-orientation texture (36 features)
     - Color histograms: RGB and HSV distributions (288 features)
-    - Statistical: Mean, std, percentiles (36 features)
-    - Texture: Edge strength analysis (26 features)
-    - Spatial: Pyramid + regional distribution (71 features)
-    Total: ~2000+ features for maximum discrimination
+    Total: ~1850 features (optimized for speed and accuracy)
     """
-    # Extract all feature types
+    # Extract core feature types (most discriminative)
     hog_features = extract_hog_features(image)
     lbp_features = extract_lbp_features(image)
-    gabor_features = extract_gabor_features(image)
     color_features = extract_color_histogram(image)
-    stat_features = extract_statistical_features(image)
-    texture_features = extract_texture_features(image)
-    spatial_features = extract_spatial_features(image)
     
-    # Concatenate all features into single vector
+    # Concatenate features into single vector
     feature_vector = np.concatenate([
         hog_features, 
         lbp_features,
-        gabor_features,
-        color_features, 
-        stat_features, 
-        texture_features,
-        spatial_features
+        color_features
     ])
     
     return feature_vector

@@ -51,21 +51,14 @@ def train_svm(X_train, y_train, X_test, y_test):
     print("Training SVM Classifier")
     print("="*50)
     
-    # Focused hyperparameter search - best performers only
+    # Fast, focused hyperparameter search (optimized for speed)
     configs = [
-        # Top RBF kernel configurations (proven best)
+        # Best RBF configurations (lower C for faster training)
+        {'kernel': 'rbf', 'C': 100.0, 'gamma': 'scale'},
+        {'kernel': 'rbf', 'C': 200.0, 'gamma': 'scale'},
         {'kernel': 'rbf', 'C': 500.0, 'gamma': 'scale'},
-        {'kernel': 'rbf', 'C': 800.0, 'gamma': 'scale'},
-        {'kernel': 'rbf', 'C': 1000.0, 'gamma': 'scale'},
-        {'kernel': 'rbf', 'C': 500.0, 'gamma': 'auto'},
-        {'kernel': 'rbf', 'C': 800.0, 'gamma': 'auto'},
-        # Fine-tuned gamma (most promising)
-        {'kernel': 'rbf', 'C': 500.0, 'gamma': 0.001},
-        {'kernel': 'rbf', 'C': 800.0, 'gamma': 0.001},
-        # Polynomial (backup)
-        {'kernel': 'poly', 'C': 500.0, 'degree': 2, 'gamma': 'scale'},
-        # Linear (fast baseline)
-        {'kernel': 'linear', 'C': 200.0},
+        # Linear kernel (very fast, good baseline)
+        {'kernel': 'linear', 'C': 100.0},
     ]
     
     best_svm = None
