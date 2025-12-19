@@ -159,7 +159,7 @@ def evaluate_ensemble(dataset_path='dataset_augmented', voting='weighted'):
     print(f"Test Accuracy: {accuracy:.4f} ({accuracy*100:.2f}%)")
     print(f"Average Confidence: {np.mean(confidences):.4f}")
     print(f"\nClassification Report:")
-    print(classification_report(y_test, predictions, target_names=[config.CLASSES[i] for i in range(6)]))
+    print(classification_report(y_test, predictions, target_names=[config.CLASSES[i] for i in range(7)]))
     
     print("\nConfusion Matrix:")
     print(confusion_matrix(y_test, predictions))

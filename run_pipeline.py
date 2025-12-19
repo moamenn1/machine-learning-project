@@ -30,6 +30,15 @@ def run_pipeline():
         response = input("Models exist. Re-train? (y/n): ")
         if response.lower() != 'y':
             print("Skipping training...")
+            # Display saved accuracies
+            accuracy_file = Path("models/accuracies.txt")
+            if accuracy_file.exists():
+                print("\n" + "="*50)
+                print("TRAINED MODEL ACCURACIES")
+                print("="*50)
+                with open(accuracy_file, 'r') as f:
+                    print(f.read().strip())
+                print("="*50)
         else:
             from train_models import main as train_main
             train_main()

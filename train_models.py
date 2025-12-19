@@ -179,6 +179,13 @@ def main():
     print(f"k-NN model saved to {config.KNN_MODEL_PATH}")
     print(f"Scaler saved to {config.SCALER_PATH}")
     
+    # Save accuracies to file for later display
+    accuracy_file = Path("models/accuracies.txt")
+    with open(accuracy_file, 'w') as f:
+        f.write(f"SVM Accuracy: {svm_acc:.4f}\n")
+        f.write(f"k-NN Accuracy: {knn_acc:.4f}\n")
+        f.write(f"Best Model: {'SVM' if svm_acc > knn_acc else 'k-NN'}\n")
+    
     # Summary
     print("\n" + "="*50)
     print("TRAINING SUMMARY")
