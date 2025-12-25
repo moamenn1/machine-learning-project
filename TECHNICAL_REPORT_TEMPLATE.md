@@ -1,11 +1,5 @@
 # Technical Report: Automated Material Stream Identification System
 
-**Team Name**: [Your Team Name]  
-**Date**: December 19, 2025  
-**Course**: [Course Code]
-
----
-
 ## 1. Executive Summary
 
 This project implements an Automated Material Stream Identification (MSI) system using classical machine learning techniques. We developed a complete pipeline including data augmentation (100%+ increase to 4,800 images), feature extraction (HOG + LBP + Color Histograms = 2,020 features), and trained two classifiers: SVM (89.27% accuracy) and k-NN (81.87% accuracy). The system successfully classifies waste materials into 6 categories plus an "unknown" class, achieving well above the 85% accuracy requirement. A real-time camera application demonstrates practical deployment capability.

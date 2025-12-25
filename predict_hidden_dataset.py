@@ -10,18 +10,7 @@ import config
 from feature_extraction import extract_features, preprocess_image
 
 def predict_hidden_dataset(hidden_dir, model_path, output_file='predictions.csv', use_ensemble=False):
-    """
-    Generate predictions for unlabeled hidden test set.
-    
-    Args:
-        hidden_dir: Directory containing unlabeled test images
-        model_path: Path to trained model (.pkl file)
-        output_file: Output CSV file for predictions
-        use_ensemble: If True, use both SVM and k-NN for ensemble prediction
-    
-    Returns:
-        DataFrame with predictions
-    """
+ 
     print(f"Loading model from {model_path}...")
     
     # Load model and scaler
