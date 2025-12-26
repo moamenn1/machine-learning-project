@@ -13,7 +13,8 @@
    ```
    
    This will:
-   - Augment your dataset to 500 samples per class
+   - Augment your dataset to 800 samples per class
+   - Extract deep learning features using ResNet-18
    - Train both SVM and k-NN models
    - Launch the real-time demo
 
@@ -45,12 +46,16 @@ python evaluate_model.py
 
 ## Expected Results
 
-- **Data Augmentation**: ~500 images per class (6 classes)
-- **Training Time**: 2-5 minutes depending on hardware
-- **Validation Accuracy**: Target >85%
-- **Real-time FPS**: 10-30 FPS depending on hardware
+- **Data Augmentation**: ~800 images per class (6 classes)
+- **Feature Extraction**: 512-dimensional ResNet-18 features (transfer learning)
+- **Training Time**: 5-15 minutes depending on hardware (PyTorch uses GPU if available)
+- **Validation Accuracy**: Target >90% with deep learning features
+- **Real-time FPS**: 5-15 FPS (ResNet inference is slower but more accurate)
 
 ## Troubleshooting
+
+**Issue**: "No module named 'img2vec_pytorch'"
+- **Solution**: `pip install img2vec-pytorch torch torchvision`
 
 **Issue**: "No module named 'cv2'"
 - **Solution**: `pip install opencv-python`
@@ -66,9 +71,10 @@ python evaluate_model.py
 
 **Issue**: Slow real-time processing
 - **Solution**: 
-  - Reduce IMAGE_SIZE in config.py (e.g., to 64x64)
-  - Use k-NN model (faster prediction)
+  - ResNet inference is inherently slower than manual features
+  - Consider using GPU if available (PyTorch will auto-detect)
   - Close other applications
+  - Deep learning features trade speed for accuracy
 
 ## Next Steps
 

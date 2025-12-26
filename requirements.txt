@@ -3,3 +3,6 @@ scikit-learn>=1.0.0
 joblib>=1.1.0
 Pillow>=8.0.0
 opencv-python>=4.10.0
+img2vec-pytorch>=1.0.1
+torch>=2.0.0
+torchvision>=0.15.0

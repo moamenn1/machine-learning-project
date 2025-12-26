@@ -25,28 +25,26 @@
                          │
                          ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│              PHASE 2: Feature Extraction                         │
-│              (feature_extraction.py)                             │
+│              PHASE 2: Deep Learning Feature Extraction           │
+│              (feature_extraction.py + img2vec_pytorch)           │
 ├─────────────────────────────────────────────────────────────────┤
 │  Step 1: Preprocessing                                           │
-│    • Resize to 128×128                                          │
-│    • Gaussian Blur (3×3)                                        │
+│    • Convert BGR to RGB (camera compatibility)                  │
+│    • Resize to 224×224 (ResNet-18 input size)                  │
+│    • Minimal preprocessing to preserve features                 │
 │                                                                  │
-│  Step 2: HOG Features                                            │
-│    • 9 orientations                                             │
-│    • 8×8 pixels per cell                                        │
-│    • 2×2 cells per block                                        │
-│    • Output: ~1,700 features                                    │
+│  Step 2: Transfer Learning with ResNet-18                        │
+│    • Pre-trained on ImageNet (1.2M images)                      │
+│    • Extract features from final layer                          │
+│    • Output: 512-dimensional feature vector                     │
 │                                                                  │
-│  Step 3: Color Histogram                                         │
-│    • 32 bins per channel (BGR)                                  │
-│    • L1 normalization                                           │
-│    • Output: 96 features                                        │
-│                                                                  │
-│  Step 4: Concatenation                                           │
-│    • Combined vector: ~1,800 features                           │
+│  Benefits over Manual Features:                                  │
+│    • Robust to lighting variations                              │
+│    • Handles different angles/perspectives                      │
+│    • Better generalization to real-world objects                │
+│    • Trained on millions of diverse images                      │
 ├─────────────────────────────────────────────────────────────────┤
-│  Output: Feature matrix X (3000 × 1800)                         │
+│  Output: Feature matrix X (4800 × 512)                          │
 └────────────────────────┬────────────────────────────────────────┘
                          │
                          ▼

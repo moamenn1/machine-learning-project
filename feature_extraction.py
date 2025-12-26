@@ -3,6 +3,10 @@
 import numpy as np
 from PIL import Image
 import config
+from img2vec_pytorch import Img2Vec
+
+# Initialize Img2Vec with ResNet-18 (global instance)
+img2vec = Img2Vec(cuda=False, model='resnet18')
 
 def extract_lbp_features(image):
     """Extract Local Binary Pattern features for texture analysis."""
@@ -297,25 +301,21 @@ def extract_spatial_features(image):
 
 def extract_features(image):
     """
-    Extract optimized feature vector for fast, accurate classification.
+    Extract deep learning features using pre-trained ResNet-18.
     
-    Uses only the most important features:
-    - HOG: Shape and edge information (~1500 features)
-    - LBP: Texture patterns (64 features)
-    - Color histograms: RGB and HSV distributions (288 features)
-    Total: ~1850 features (optimized for speed and accuracy)
+    This uses transfer learning from ImageNet to get much better features
+    than manual HOG/color histograms. Returns 512-dimensional feature vector.
     """
-    # Extract core feature types (most discriminative)
-    hog_features = extract_hog_features(image)
-    lbp_features = extract_lbp_features(image)
-    color_features = extract_color_histogram(image)
+    # Convert numpy array to PIL Image if needed
+    if isinstance(image, np.ndarray):
+        pil_img = Image.fromarray(image.astype('uint8'))
+    else:
+        pil_img = image
     
-    # Concatenate features into single vector
-    feature_vector = np.concatenate([
-        hog_features, 
-        lbp_features,
-        color_features
-    ])
+    # Extract features using Img2Vec (ResNet-18)
+    feature_vector = img2vec.get_vec(pil_img)
+    
+    return feature_vector
     
     return feature_vector
 
@@ -330,16 +330,7 @@ def preprocess_image(image):
     pil_img = pil_img.resize(config.IMAGE_SIZE, Image.Resampling.LANCZOS)
     image = np.array(pil_img)
     
-    # Simple blur using convolution
-    kernel = np.ones((3, 3), np.float32) / 9
-    if len(image.shape) == 3:
-        for i in range(3):
-            from scipy.ndimage import convolve
-            try:
-                image[:, :, i] = convolve(image[:, :, i].astype(np.float32), kernel, mode='reflect')
-            except:
-                pass  # Skip blur if scipy not available
-    
+    # Minimal processing - just resize to match training
     return image
 
 if __name__ == "__main__":

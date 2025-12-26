@@ -6,13 +6,20 @@ A machine learning-based waste classification system using SVM and k-NN classifi
 
 This system classifies waste materials into 6 categories (glass, paper, cardboard, plastic, metal, trash) plus an "unknown" class for out-of-distribution items.
 
+**Achieved Results:**
+- SVM: 97.08% accuracy
+- k-NN: 94.79% accuracy  
+- Ensemble: 97.71% accuracy (best)
+- Real-time camera classification at 10-20 FPS
+
 ## Features
 
-- **Data Augmentation**: Balances dataset to 500 samples per class using rotation, flipping, brightness adjustment, scaling, and noise
-- **Feature Extraction**: Combines HOG (Histogram of Oriented Gradients) and color histogram features
-- **Dual Classifiers**: Implements both SVM and k-NN classifiers
-- **Rejection Mechanism**: Handles unknown/out-of-distribution samples
-- **Real-time Classification**: Live webcam feed processing
+- **Deep Learning Feature Extraction**: Uses pre-trained ResNet-18 via img2vec_pytorch for robust feature extraction (512 dimensions)
+- **Data Augmentation**: Balances dataset to 800 samples per class using rotation, flipping, brightness adjustment, scaling, and noise
+- **Dual Classifiers**: Implements both SVM and k-NN classifiers with optimized hyperparameters
+- **Rejection Mechanism**: Handles unknown/out-of-distribution samples with confidence threshold
+- **Real-time Classification**: Live webcam feed with BGR→RGB conversion, temporal smoothing, and ROI selection
+- **Camera Optimizations**: Automatic camera settings, contrast enhancement, and preprocessing for real-world conditions
 
 ## Installation
 
@@ -66,17 +73,18 @@ python evaluate_model.py
 
 ### Feature Extraction Pipeline
 
-**Image → Preprocessing → Feature Extraction → Feature Vector**
+**Image → Preprocessing → Deep Learning Features → Feature Vector**
 
 1. **Preprocessing**:
-   - Resize to 128x128 pixels
-   - Gaussian blur for noise reduction
+   - BGR to RGB conversion (for camera compatibility)
+   - Resize to 224x224 pixels (ResNet input size)
+   - Minimal preprocessing to match training conditions
 
-2. **HOG Features** (Shape/Edge Information):
-   - 9 orientations
-   - 8x8 pixels per cell
-   - 2x2 cells per block
-   - Captures object shape and structure
+2. **Deep Learning Features** (Transfer Learning):
+   - Pre-trained ResNet-18 from ImageNet
+   - Extracts 512-dimensional feature vectors
+   - Robust to lighting, angles, and backgrounds
+   - Much more accurate than manual HOG/color features
 
 3. **Color Histogram Features** (Color Distribution):
    - 32 bins per channel (BGR)

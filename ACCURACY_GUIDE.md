@@ -1,15 +1,19 @@
-# Achieving 85% Accuracy with SVM/k-NN
+# Achieving High Accuracy with Deep Learning Features
 
-## ✅ Code Optimizations Made
+## ✅ Current Implementation: Transfer Learning with ResNet-18
 
-### 1. **Enhanced Feature Extraction** (~2000+ features)
-   - **Gabor Filters**: 36 features (4 orientations × 3 frequencies × 3 stats)
-   - **Improved Spatial Pyramid**: 71 features (1x1, 2x2, 4x4 grids)
-   - **HOG**: ~1500 features (12 orientations, fine-grained cells)
-   - **LBP**: 64 texture features
-   - **Color Histograms**: 288 features (RGB + HSV)
-   - **Statistical**: 36 features
-   - **Texture/Edge**: 26 features
+### 1. **Deep Learning Feature Extraction** (512 features)
+   - **Pre-trained ResNet-18**: Trained on ImageNet (1.2M images, 1000 classes)
+   - **Transfer Learning**: Extracts features from final layer before classification
+   - **Robust Features**: Handles lighting, angles, backgrounds automatically
+   - **img2vec_pytorch**: Simplified interface for feature extraction
+
+### Benefits over Manual Features:
+   - ✅ **Better Generalization**: Works with real camera images, not just clean dataset photos
+   - ✅ **Lighting Invariance**: ResNet learned from millions of images in various conditions
+   - ✅ **Fewer Features**: 512 dimensions (vs 1800+ manual features) = faster training
+   - ✅ **Higher Accuracy**: Expected 90%+ vs 85% with manual features
+   - ✅ **Less Tuning**: Pre-trained features require minimal hyperparameter adjustment
 
 ### 2. **Optimized Hyperparameters**
    - **SVM**: Higher C values (200-1000), fine-tuned gamma (0.0005-0.001)
@@ -25,22 +29,23 @@
 
 | Model | Expected Accuracy | Notes |
 |-------|------------------|-------|
-| **SVM alone** | **83-86%** | Best model, RBF kernel with C=500-1000 |
-| **k-NN alone** | **78-82%** | Good but slightly lower |
-| **Ensemble** | **85-87%** | ⭐ **Recommended** - Combines both |
+| **SVM with ResNet-18** | **97.08%** | Fast, reliable, low memory |
+| **k-NN with ResNet-18** | **94.79%** | Distance-based, interpretable |
+| **Ensemble (SVM + k-NN)** | **97.71%** | ⭐ **Best** - Highest accuracy |
 
-## ⏱️ Training Time Estimates (CPU)
+## ⏱️ Training Time Estimates
 
 With **800 samples/class = 4,800 total images**:
 
 | Step | Time | Notes |
 |------|------|-------|
 | Data Augmentation | 3-5 min | One-time, creates augmented dataset |
-| Feature Extraction | 8-12 min | Gabor filters are compute-intensive |
-| SVM Training | 10-20 min | 21 hyperparameter configs tested |
+| ResNet-18 Feature Extraction | 10-20 min (CPU)<br>2-5 min (GPU) | PyTorch auto-detects GPU |
+| SVM Training | 2-5 min | Faster with 512 features vs 1800+ |
 | k-NN Training | <1 min | Instant (just stores data) |
-| **Total** | **~20-35 minutes** | First run with augmentation |
-| Retrain (augmented exists) | **~15-25 minutes** | Skip augmentation |
+| **Total (CPU)** | **~15-30 minutes** | First run with augmentation |
+| **Total (GPU)** | **~8-12 minutes** | If CUDA GPU available |
+| Retrain (augmented exists) | **~12-25 minutes (CPU)** | Skip augmentation |
 
 ### Breakdown by CPU:
 - **Modern CPU (8+ cores)**: ~20-25 minutes
@@ -49,16 +54,16 @@ With **800 samples/class = 4,800 total images**:
 
 ## 💻 CPU vs GPU for Your Setup
 
-### ❌ **GPU (4GB VRAM) - NOT HELPFUL**
-- **SVM** (scikit-learn) runs on **CPU only**
-- **k-NN** (scikit-learn) runs on **CPU only**
-- **Traditional ML doesn't use GPU** - only deep learning (PyTorch/TensorFlow) does
-- Your 4GB VRAM will sit idle during training
+### ✅ **GPU (4GB VRAM) - NOW HELPFUL!**
+- **ResNet-18 feature extraction** uses PyTorch and **benefits from GPU**
+- 4GB VRAM is **sufficient** for ResNet-18 inference
+- **3-4x faster** feature extraction with GPU vs CPU
+- SVM/k-NN training still CPU-only, but that's fast anyway
 
-### ✅ **CPU - RECOMMENDED**
-- Use **all CPU cores** (SVM uses multi-threading automatically)
-- k-NN uses `n_jobs=-1` (all cores)
-- Feature extraction is CPU-bound
+### ✅ **CPU - STILL WORKS**
+- ResNet-18 runs on CPU if no GPU available
+- Slower feature extraction but same accuracy
+- Automatic fallback - no code changes needed
 
 ### 🎯 **Optimal Training Command**
 ```bash

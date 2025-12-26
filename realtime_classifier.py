@@ -65,6 +65,12 @@ class RealtimeClassifier:
         """Run real-time classification on webcam feed."""
         cap = cv2.VideoCapture(0)
         
+        # Set camera properties for better image quality
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+        cap.set(cv2.CAP_PROP_AUTOFOCUS, 1)
+        cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.75)
+        
         if not cap.isOpened():
             print("Error: Could not open webcam")
             return
@@ -140,8 +146,11 @@ class RealtimeClassifier:
                 margin_h, margin_w = int(h * 0.25), int(w * 0.25)
                 frame_to_classify = frame[margin_h:h-margin_h, margin_w:w-margin_w]
             
+            # Convert BGR to RGB (OpenCV uses BGR, PIL/training used RGB)
+            frame_to_classify_rgb = cv2.cvtColor(frame_to_classify, cv2.COLOR_BGR2RGB)
+            
             # Make prediction
-            class_id, class_name, confidence = self.predict(frame_to_classify)
+            class_id, class_name, confidence = self.predict(frame_to_classify_rgb)
             
             # Temporal smoothing - vote across last N frames
             if use_smoothing and not frozen:

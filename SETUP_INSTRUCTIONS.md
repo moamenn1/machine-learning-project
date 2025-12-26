@@ -11,8 +11,11 @@ pip install -r requirements.txt
 Or install individually:
 
 ```bash
-pip install numpy opencv-python scikit-learn scikit-image joblib matplotlib
+pip install numpy opencv-python scikit-learn joblib matplotlib Pillow
+pip install img2vec-pytorch torch torchvision
 ```
+
+**Note**: The project now uses deep learning features via ResNet-18, which requires PyTorch and img2vec-pytorch.
 
 ## Step 2: Verify Setup
 

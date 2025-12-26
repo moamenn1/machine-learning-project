@@ -41,7 +41,7 @@ KNN_NEIGHBORS = 7  # Better k value for this dataset
 KNN_WEIGHTS = 'distance'
 
 # Rejection threshold for unknown class
-CONFIDENCE_THRESHOLD = 0.5
+CONFIDENCE_THRESHOLD = 0.25  # Very low to force predictions
 
 # Model save paths
 SVM_MODEL_PATH = "models/svm_classifier.pkl"
